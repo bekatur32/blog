@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-db*)vzbzoi#szmm=+6479dx^s5ae@q143$xlngj9@^q3-c!soi
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+SITE_ID = 1
 
 # Application definition
 
@@ -30,6 +30,10 @@ INSTALLED_APPS = [
 
     #ista
     'taggit',
+    'markdown',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [
@@ -68,8 +72,8 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'blog',
     }
 }
 
@@ -116,8 +120,8 @@ STATICFILES_DIRS =[BASE_DIR / 'static']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #
-#EMAIL_HOST = 'bekatur32.gmail.com'
+EMAIL_HOST = 'bekatur32.gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#EMAIL_HOST_USER = 'bekatur32.gmail.com'
-#EMAIL_PORT =587
-#EMAIL_USE_TLS =True
+EMAIL_HOST_USER = 'bekatur32.gmail.com'
+EMAIL_PORT =587
+EMAIL_USE_TLS =True

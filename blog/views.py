@@ -7,7 +7,8 @@ from django.views.generic import ListView
 from django.views.decorators.http import require_POST
 from taggit.models import Tag
 from django.db.models import Count
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib.postgres.search import TrigramSimilarity
 
 def post_search(request):
     form = Searchforms()
@@ -17,8 +18,12 @@ def post_search(request):
         form = Searchforms(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            results = Post.objects.filter(status=Post.Status.PUBLISHED).annotate(search=SearchVector('title', 'body'),
-            ).filter(search=query)
+            search_vector = SearchVector('title', weight='A') + \
+                SearchVector('body',weight='B')
+            search_query = SearchQuery(query,confidg='spanish')
+            results = Post.objects.filter(status=Post.Status.PUBLISHED).annotate(similarity=TrigramSimilarity('title', query),
+                                                                                    ).filter(similarity__gt=0.1).order_by('-similarity')
+
     return render(request, 'blog/search.html', {'query':query, 'form':form, 'results':results})
 
 def post_share(request, post_id):

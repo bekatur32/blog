@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block content %}
+{% load blog_tags %}
+{%block content %}
 {% if tag %}
     <h2>Posts tagget with "{{ tag.name}}"</h2>
 {% endif %}
@@ -16,13 +17,13 @@
             {% endif %}
         {% endfor %}
         </p>
-    <p class="tags">Tags: {{post.tags.all|join:","}}</p>
+    <p class="tags">
+        Tags: {{post.tags.all|join:","}}
+    </p>
     <p class="date">
-        
         Published {{ post.publish }} by {{ post.author }}
     </p>
-    <hr>
-
-{% endfor %}
-{% include "paginator.html" with page=object_list %}
+    {{ post.body|markdown|truncatewords_html:30 }}
+    {% endfor %}
+    {% include "paginator.html" with page=object_list %}
 {% endblock %}
